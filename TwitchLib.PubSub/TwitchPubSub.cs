@@ -3,6 +3,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Timers;
 using TwitchLib.Communication.Clients;
 using TwitchLib.Communication.Enums;
@@ -21,7 +22,7 @@ namespace TwitchLib.PubSub
     /// Implements the <see cref="ITwitchPubSub" />
     /// </summary>
     /// <seealso cref="ITwitchPubSub" />
-    public class TwitchPubSub : ITwitchPubSub
+    public class TwitchPubSub
     {
         /// <summary>
         /// The socket
@@ -197,7 +198,7 @@ namespace TwitchLib.PubSub
 
             _socket.OnConnected += Socket_OnConnected;
             _socket.OnError += OnError;
-            _socket.OnMessage += OnMessage; ;
+            _socket.OnMessage += OnMessage;
             _socket.OnDisconnected += Socket_OnDisconnected;
         }
 
@@ -255,12 +256,13 @@ namespace TwitchLib.PubSub
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="ElapsedEventArgs"/> instance containing the event data.</param>
-        private void PingTimerTick(object sender, ElapsedEventArgs e)
+        private async void PingTimerTick(object sender, ElapsedEventArgs e)
         {
             var data = new JObject(
                 new JProperty("type", "PING")
             );
-            _socket.Send(data.ToString());
+
+			await _socket.Send(data.ToString());
         }
 
         /// <summary>
@@ -451,7 +453,7 @@ namespace TwitchLib.PubSub
         /// </summary>
         /// <param name="oauth">The oauth.</param>
         /// <param name="unlisten">if set to <c>true</c> [unlisten].</param>
-        public void SendTopics(string oauth = null, bool unlisten = false)
+        public async Task SendTopics(string oauth = null, bool unlisten = false)
         {
             if (oauth != null && oauth.Contains("oauth:"))
             {
@@ -481,7 +483,7 @@ namespace TwitchLib.PubSub
                 ((JObject)jsonData.SelectToken("data")).Add(new JProperty("auth_token", oauth));
             }
 
-            _socket.Send(jsonData.ToString());
+            await _socket.Send(jsonData.ToString());
 
             _topicList.Clear();
         }
@@ -597,9 +599,9 @@ namespace TwitchLib.PubSub
         /// <summary>
         /// Method to connect to Twitch's PubSub service. You MUST listen toOnConnected event and listen to a Topic within 15 seconds of connecting (or be disconnected)
         /// </summary>
-        public void Connect()
+        public async Task Connect()
         {
-            _socket.Open();
+            await _socket.Open();
         }
 
         /// <inheritdoc />
