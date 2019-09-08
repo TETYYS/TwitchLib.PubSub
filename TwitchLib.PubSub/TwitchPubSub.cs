@@ -11,7 +11,6 @@ using TwitchLib.Communication.Events;
 using TwitchLib.Communication.Models;
 using TwitchLib.PubSub.Enums;
 using TwitchLib.PubSub.Events;
-using TwitchLib.PubSub.Interfaces;
 using TwitchLib.PubSub.Models;
 using TwitchLib.PubSub.Models.Responses.Messages;
 
