@@ -261,7 +261,13 @@ namespace TwitchLib.PubSub
                 new JProperty("type", "PING")
             );
 
-			await _socket.Send(data.ToString());
+            if (_socket.IsConnected) {
+                try {
+                    await _socket.Send(data.ToString());
+                } catch {
+                    this.Disconnect();
+                }
+            }
         }
 
         /// <summary>
@@ -605,21 +611,11 @@ namespace TwitchLib.PubSub
 
         /// <inheritdoc />
         /// <summary>
-        /// What do you think it does? :)
+        /// Closes connection to remote socket
         /// </summary>
         public void Disconnect()
         {
             _socket.Close();
-        }
-
-        /// <inheritdoc />
-        /// <summary>
-        /// This method will send passed json text to the message parser in order to allow forOn-demand parser testing.
-        /// </summary>
-        /// <param name="testJsonString">The test json string.</param>
-        public void TestMessageParser(string testJsonString)
-        {
-            ParseMessage(testJsonString);
         }
     }
 }
