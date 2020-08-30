@@ -244,7 +244,7 @@ namespace TwitchLib.PubSub
         private void Socket_OnConnected(object sender, EventArgs e)
         {
             _logger?.LogInformation("PubSub Websocket connection established");
-            _pingTimer.Interval = 180000;
+            _pingTimer.Interval = 15000;
             _pingTimer.Elapsed += PingTimerTick;
             _pingTimer.Start();
             OnPubSubServiceConnected?.Invoke(this, null);
