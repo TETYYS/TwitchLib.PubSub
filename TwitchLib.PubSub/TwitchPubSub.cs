@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -30,7 +31,7 @@ namespace TwitchLib.PubSub
         /// <summary>
         /// The previous requests
         /// </summary>
-        private readonly List<PreviousRequest> _previousRequests = new List<PreviousRequest>();
+        private readonly BlockingCollection<PreviousRequest> _previousRequests = new BlockingCollection<PreviousRequest>();
         /// <summary>
         /// The logger
         /// </summary>
