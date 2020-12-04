@@ -296,7 +296,13 @@ namespace TwitchLib.PubSub
                     }
                     break;
                 case "message":
-                    var msg = new Models.Responses.Message(message);
+					Models.Responses.Message msg;
+                    try {
+                        msg = new Models.Responses.Message(message);
+                    } catch (Exception ex) {
+                        Console.WriteLine($"Failed to parse pubsub message {message}: {ex}");
+                        return;
+					}
                     var channelId = _topicToChannelId[msg.Topic] ?? "";
                     switch (msg.Topic.Split('.')[0])
                     {
