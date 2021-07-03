@@ -53,7 +53,7 @@ namespace TwitchLib.PubSub.Models.Responses.Messages
             ModerationAction = json.SelectToken("moderation_action")?.ToString();
             if (json.SelectToken("args") != null)
                 foreach (var arg in json.SelectToken("args"))
-                    Args.Add(arg.ToString());
+                    Args.Add(arg?.ToString());
             CreatedBy = json.SelectToken("created_by").ToString();
             CreatedByUserId = json.SelectToken("created_by_user_id").ToString();
             TargetUserId = json.SelectToken("target_user_id").ToString();
